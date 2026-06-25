@@ -6,7 +6,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const API_URL = "http://localhost:3000";
+  const APP_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
     getStudents();
