@@ -19,13 +19,7 @@ function App() {
       setLoading(true);
 
       const studentsRes = await fetch(`${API_URL}/students`);
-      const attendanceRes = await fetch(
-        `${API_URL}/attendance/today`
-      );
-
-      if (!studentsRes.ok || !attendanceRes.ok) {
-        throw new Error("API request failed");
-      }
+      const attendanceRes = await fetch(`${API_URL}/attendance/today`);
 
       const studentsData = await studentsRes.json();
       const attendanceData = await attendanceRes.json();
@@ -33,209 +27,159 @@ function App() {
       const attendanceMap = {};
 
       attendanceData.forEach((record) => {
-        const studentId =
-          record.studentId?._id || record.studentId;
-
+        const studentId = record.studentId?._id || record.studentId;
         attendanceMap[studentId] = record.status;
       });
 
-      const updatedStudents = studentsData.map((student) => ({
-        ...student,
-        attendance: attendanceMap[student._id] || "",
+      const updated = studentsData.map((s) => ({
+        ...s,
+        attendance: attendanceMap[s._id] || "",
       }));
 
-      setStudents(updatedStudents);
-    } catch (error) {
-      console.error(error);
+      setStudents(updated);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const saveAttendance = async (
-    studentId,
-    status
-  ) => {
-    try {
-      await fetch(`${API_URL}/attendance`, {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
-        body: JSON.stringify({
-          studentId,
-          status,
-          date: new Date()
-            .toISOString()
-            .split("T")[0],
-        }),
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  const saveAttendance = async (id, status) => {
+    await fetch(`${API_URL}/attendance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        studentId: id,
+        status,
+        date: new Date().toISOString().split("T")[0],
+      }),
+    });
   };
 
-  const markAttendance = (id, status) => {
+  const mark = (id, status) => {
     if (submitted) return;
 
     setStudents((prev) =>
-      prev.map((student) =>
-        student._id === id
-          ? {
-              ...student,
-              attendance: status,
-            }
-          : student
+      prev.map((s) =>
+        s._id === id ? { ...s, attendance: status } : s
       )
     );
 
     saveAttendance(id, status);
   };
 
-  const submitAttendance = () => {
+  const submitAll = () => {
     setSubmitted(true);
-    alert("Attendance Submitted Successfully!");
   };
 
-  const resetAttendance = async () => {
-    try {
-      await fetch(
-        `${API_URL}/attendance/today`,
-        {
-          method: "DELETE",
-        }
-      );
+  const resetAll = async () => {
+    await fetch(`${API_URL}/attendance/today`, {
+      method: "DELETE",
+    });
 
-      setStudents((prev) =>
-        prev.map((student) => ({
-          ...student,
-          attendance: "",
-        }))
-      );
+    setStudents((prev) =>
+      prev.map((s) => ({ ...s, attendance: "" }))
+    );
 
-      setSubmitted(false);
-    } catch (error) {
-      console.error(error);
-    }
+    setSubmitted(false);
   };
 
-  const presentCount = students.filter(
-    (s) => s.attendance === "P"
-  ).length;
-
-  const absentCount = students.filter(
-    (s) => s.attendance === "A"
-  ).length;
-
-  const totalMarked =
-    presentCount + absentCount;
-
-  const filteredStudents = students.filter(
-    (student) =>
-      student.name
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      String(student.rollNo).includes(search)
+  const filtered = students.filter(
+    (s) =>
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
+      String(s.rollNo).includes(search)
   );
 
+  const present = students.filter((s) => s.attendance === "P").length;
+  const absent = students.filter((s) => s.attendance === "A").length;
+
   return (
-    <div className="container">
-      <h1>🎓 Attendance Management System</h1>
+    <div className="page">
 
-      <input
-        type="text"
-        placeholder="Search by name or roll no..."
-        value={search}
-        onChange={(e) =>
-          setSearch(e.target.value)
-        }
-      />
-
-      <div className="summary">
-        <h3>🟢 Present : {presentCount}</h3>
-        <h3>🔴 Absent : {absentCount}</h3>
-        <h3>
-          👨‍🎓 Total Students :
-          {students.length}
-        </h3>
-        <h3>📊 Marked : {totalMarked}</h3>
+      {/* HEADER */}
+      <div className="header">
+        <h1>📘 Smart Attendance Panel</h1>
+        <p>Mark, Track & Manage Student Attendance</p>
       </div>
 
-      <div className="reset-section">
-        <button onClick={resetAttendance}>
-          🔄 Reset All
-        </button>
+      {/* SEARCH + ACTIONS */}
+      <div className="top-bar">
+        <input
+          placeholder="🔍 Search student..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-        <button
-          onClick={submitAttendance}
-          style={{ marginLeft: "10px" }}
-        >
-          ✅ Submit Attendance
-        </button>
+        <div className="actions">
+          <button className="reset" onClick={resetAll}>
+            Reset
+          </button>
+
+          <button className="submit" onClick={submitAll}>
+            Submit
+          </button>
+        </div>
       </div>
 
+      {/* STATS */}
+      <div className="stats">
+        <div className="card green">Present <span>{present}</span></div>
+        <div className="card red">Absent <span>{absent}</span></div>
+        <div className="card blue">Total <span>{students.length}</span></div>
+        <div className="card purple">Marked <span>{present + absent}</span></div>
+      </div>
+
+      {/* TABLE */}
       {loading ? (
-        <p>Loading...</p>
+        <div className="loading">Loading students...</div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Roll No</th>
-              <th>Name</th>
-              <th>Attendance</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        <div className="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Actions</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {filteredStudents.map(
-              (student) => (
-                <tr key={student._id}>
-                  <td>{student.rollNo}</td>
-
-                  <td>{student.name}</td>
+            <tbody>
+              {filtered.map((s) => (
+                <tr key={s._id}>
+                  <td>{s.rollNo}</td>
+                  <td>{s.name}</td>
 
                   <td>
                     <button
-                      className="present-btn"
                       disabled={submitted}
-                      onClick={() =>
-                        markAttendance(
-                          student._id,
-                          "P"
-                        )
-                      }
+                      className="btn present"
+                      onClick={() => mark(s._id, "P")}
                     >
                       Present
                     </button>
 
                     <button
-                      className="absent-btn"
                       disabled={submitted}
-                      onClick={() =>
-                        markAttendance(
-                          student._id,
-                          "A"
-                        )
-                      }
+                      className="btn absent"
+                      onClick={() => mark(s._id, "A")}
                     >
                       Absent
                     </button>
                   </td>
 
                   <td>
-                    {student.attendance === "P"
+                    {s.attendance === "P"
                       ? "🟢 Present"
-                      : student.attendance === "A"
+                      : s.attendance === "A"
                       ? "🔴 Absent"
-                      : "-"}
+                      : "—"}
                   </td>
                 </tr>
-              )
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
