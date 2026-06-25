@@ -7,7 +7,8 @@ function App() {
   const [search, setSearch] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const API_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
     getStudents();
@@ -37,7 +38,7 @@ function App() {
 
       setStudents(updated);
     } catch (err) {
-      console.error("Error fetching data:", err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -97,18 +98,8 @@ function App() {
 
       {/* HEADER */}
       <div className="header">
-        <h1>Smart Attendance Panel</h1>
+        <h1> Smart Attendance Panel</h1>
         <p>Mark, Track & Manage Student Attendance</p>
-
-        {/* 🔥 LIVE PROJECT LINK */}
-        <a
-          href="https://your-live-project-link.com"
-          target="_blank"
-          rel="noreferrer"
-          className="live-link"
-        >
-          🔗 View Live Project
-        </a>
       </div>
 
       {/* SEARCH + ACTIONS */}
@@ -132,18 +123,10 @@ function App() {
 
       {/* STATS */}
       <div className="stats">
-        <div className="card green">
-          Present <span>{present}</span>
-        </div>
-        <div className="card red">
-          Absent <span>{absent}</span>
-        </div>
-        <div className="card blue">
-          Total <span>{students.length}</span>
-        </div>
-        <div className="card purple">
-          Marked <span>{present + absent}</span>
-        </div>
+        <div className="card green">Present <span>{present}</span></div>
+        <div className="card red">Absent <span>{absent}</span></div>
+        <div className="card blue">Total <span>{students.length}</span></div>
+        <div className="card purple">Marked <span>{present + absent}</span></div>
       </div>
 
       {/* TABLE */}
