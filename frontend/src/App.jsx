@@ -5,9 +5,11 @@ function App() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-  
+  const API_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3000";
+
   useEffect(() => {
     getStudents();
   }, []);
@@ -37,13 +39,10 @@ function App() {
         attendanceMap[studentId] = record.status;
       });
 
-      const updatedStudents = studentsData.map(
-        (student) => ({
-          ...student,
-          attendance:
-            attendanceMap[student._id] || "",
-        })
-      );
+      const updatedStudents = studentsData.map((student) => ({
+        ...student,
+        attendance: attendanceMap[student._id] || "",
+      }));
 
       setStudents(updatedStudents);
     } catch (error) {
@@ -78,6 +77,8 @@ function App() {
   };
 
   const markAttendance = (id, status) => {
+    if (submitted) return;
+
     setStudents((prev) =>
       prev.map((student) =>
         student._id === id
@@ -90,6 +91,11 @@ function App() {
     );
 
     saveAttendance(id, status);
+  };
+
+  const submitAttendance = () => {
+    setSubmitted(true);
+    alert("Attendance Submitted Successfully!");
   };
 
   const resetAttendance = async () => {
@@ -107,6 +113,8 @@ function App() {
           attendance: "",
         }))
       );
+
+      setSubmitted(false);
     } catch (error) {
       console.error(error);
     }
@@ -158,6 +166,13 @@ function App() {
         <button onClick={resetAttendance}>
           🔄 Reset All
         </button>
+
+        <button
+          onClick={submitAttendance}
+          style={{ marginLeft: "10px" }}
+        >
+          ✅ Submit Attendance
+        </button>
       </div>
 
       {loading ? (
@@ -178,11 +193,13 @@ function App() {
               (student) => (
                 <tr key={student._id}>
                   <td>{student.rollNo}</td>
+
                   <td>{student.name}</td>
 
                   <td>
                     <button
                       className="present-btn"
+                      disabled={submitted}
                       onClick={() =>
                         markAttendance(
                           student._id,
@@ -195,6 +212,7 @@ function App() {
 
                     <button
                       className="absent-btn"
+                      disabled={submitted}
                       onClick={() =>
                         markAttendance(
                           student._id,
@@ -207,8 +225,11 @@ function App() {
                   </td>
 
                   <td>
-                    {student.attendance ||
-                      "-"}
+                    {student.attendance === "P"
+                      ? "🟢 Present"
+                      : student.attendance === "A"
+                      ? "🔴 Absent"
+                      : "-"}
                   </td>
                 </tr>
               )
