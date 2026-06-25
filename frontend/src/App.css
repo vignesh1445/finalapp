@@ -1,0 +1,297 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2, #6b73ff);
+  padding: 25px;
+}
+
+/* ================= LOGIN PAGE ================= */
+.login-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* LOGIN BOX */
+.login-box {
+  width: 360px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: white;
+}
+
+.login-box h1 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+/* LOGIN INPUTS */
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.login-box input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00c853, #00e676);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-box button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+}
+
+/* ================= MAIN CONTAINER ================= */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 25px;
+  padding: 30px;
+  color: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+}
+
+/* ================= SEARCH ================= */
+input[type="text"] {
+  width: 100%;
+  max-width: 420px;
+  display: block;
+  margin: 10px auto 20px auto;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="text"]:focus {
+  border: 1px solid #00e676;
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.5);
+}
+
+/* ================= SUMMARY ================= */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.summary h3 {
+  text-align: center;
+  padding: 16px;
+  border-radius: 15px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.summary h3:hover {
+  transform: translateY(-4px);
+}
+
+/* COLORS */
+.summary h3:nth-child(1) {
+  background: linear-gradient(135deg, #00c853, #00e676);
+}
+.summary h3:nth-child(2) {
+  background: linear-gradient(135deg, #d50000, #ff1744);
+}
+.summary h3:nth-child(3) {
+  background: linear-gradient(135deg, #2196f3, #42a5f5);
+}
+.summary h3:nth-child(4) {
+  background: linear-gradient(135deg, #8e24aa, #ab47bc);
+}
+
+/* ================= RESET BUTTON ================= */
+.reset-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.reset-section button {
+  width: 200px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reset-section button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(255, 81, 47, 0.6);
+}
+
+/* ================= TABLE ================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+thead {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+thead th {
+  padding: 15px;
+  font-size: 15px;
+}
+
+tbody tr {
+  transition: 0.3s;
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+td {
+  padding: 14px;
+  text-align: center;
+}
+
+/* ================= BUTTONS ================= */
+.present-btn {
+  background: linear-gradient(135deg, #00c853, #00e676);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 6px;
+  transition: 0.3s;
+}
+
+.present-btn:hover {
+  transform: scale(1.08);
+}
+
+.absent-btn {
+  background: linear-gradient(135deg, #d50000, #ff1744);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.absent-btn:hover {
+  transform: scale(1.08);
+}
+
+/* ACTIVE */
+.active-present {
+  background: linear-gradient(135deg, #009624, #00c853);
+}
+
+.active-absent {
+  background: linear-gradient(135deg, #b71c1c, #d50000);
+}
+
+/* DISABLED */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* STATUS */
+.status-present {
+  color: #00ff95;
+  font-weight: 700;
+}
+
+.status-absent {
+  color: #ff6b81;
+  font-weight: 700;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 900px) {
+  .summary {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .present-btn,
+  .absent-btn {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .reset-section button {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  .login-box {
+    width: 90%;
+  }
+}
